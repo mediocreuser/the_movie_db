@@ -1,0 +1,17 @@
+{
+  "printWidth": 90,
+  "overrides": [
+    {
+      "files": "*.{js,jsx,ts,tsx}",
+      "options": {
+        "useTabs": true,
+        "tabWidth": 2,
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "jsxBracketSameLine": false,
+        "parser": "flow",
+        "semi": false
+      }
+    }
+  ]
+}
