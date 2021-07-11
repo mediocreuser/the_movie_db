@@ -1,8 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import movieSlice from './moviesSlice'
+import modalSlice from './modalSlice'
 
 export default configureStore({
-	reducer: {
-		movies: movieSlice,
-	},
+	reducer: { modal: modalSlice },
 })

@@ -1,60 +1,88 @@
-/*
-
-API Key (v3 auth): fb02210959ba63bd41cf2c22114664e4
-
-API Read Access Token (v4 auth): eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYjAyMjEwOTU5YmE2M2JkNDFjZjJjMjIxMTQ2NjRlNCIsInN1YiI6IjYwYzBhNGJkZjVjODI0MDA0MDVkMTNlMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._NTNgKShozKtNALvfb-sB89WVfHtcdixrC7sVQJjMoY
-
-example: https://api.themoviedb.org/3/movie/550?api_key=fb02210959ba63bd41cf2c22114664e4
-
-
-https://api.themoviedb.org/3/discover/movie?api_key=fb02210959ba63bd41cf2c22114664e4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2&with_watch_monetization_types=flatrate
-
-* * */
-
 import axios from 'axios'
 
-const APIKey_v3auth = 'fb02210959ba63bd41cf2c22114664e4'
-
 const instance = axios.create({
-	baseURL: 'https://api.themoviedb.org/',
+	baseURL: 'https://api.themoviedb.org/3/',
+	params: { api_key: 'fb02210959ba63bd41cf2c22114664e4' },
 })
 
-export const getMovies = async () => {
-	try {
+class API {
+	async getTrending(
+		mediaType, // String -> 123_movie | tv | person
+		timeWindow // String -> week | day
+	) {
+		return await instance
+			.get(`trending/${mediaType}/${timeWindow}`)
+			.then((response) => response.data.results)
+	}
+
+	async getPopular(mediaType) {
+		return await instance
+			.get(`${mediaType}/popular`)
+			.then((response) => response.data.results)
+	}
+
+	async discover(mediaType, params) {
 		return await instance
 			.get(
-				'3/discover/movie?api_key=fb02210959ba63bd41cf2c22114664e4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2&with_watch_monetization_types=flatrate'
+				`discover/${mediaType}`,
+				{ params }
+				//
 			)
+			.then((response) => response.data)
+	}
+
+	async getGenres(mediaType) {
+		return await instance.get(`genre/${mediaType}/list`).then((response) => response.data)
+	}
+
+	async searchKeywords(string) {
+		return await instance
+			.get(`search/keyword?query=${string}`)
+			.then(({ data }) => data.results)
+	}
+
+	async getDetails(mediaType, id) {
+		return await instance.get(`${mediaType}/${id}`).then(({ data }) => data)
+	}
+
+	async getVideos(mediaType, id) {
+		return await instance
+			.get(`${mediaType}/${id}/videos`)
+			.then(({ data }) => data.results)
+	}
+
+	async getCredits(mediaType, id) {
+		return await instance.get(`${mediaType}/${id}/credits`).then(({ data }) => data)
+	}
+
+	async getExternalIDs(mediaType, id) {
+		return await instance.get(`${mediaType}/${id}/external_ids`).then(({ data }) => data)
+	}
+
+	async getKeywords(mediaType, id) {
+		return await instance.get(`${mediaType}/${id}/keywords`).then(({ data }) => {
+			if (data?.results) return data.results
+			if (data?.keywords) return data.keywords
+		})
+	}
+
+	async getReviews(mediaType, id) {
+		return await instance
+			.get(`${mediaType}/${id}/reviews`)
+			.then(({ data }) => data.results)
+	}
+
+	async getImages(mediaType, id) {
+		return await instance
+			.get(`${mediaType}/${id}/images`)
+			.then((response) => response.data)
+	}
+
+	async getRecommendations(mediaType, id) {
+		return await instance
+			.get(`${mediaType}/${id}/recommendations`)
 			.then((response) => response.data.results)
-	} catch (error) {
-		console.log(error)
 	}
 }
 
-export const movieAPI = {
-	discover: async () => {
-		try {
-			return await instance
-				.get(
-					'3/discover/movie?api_key=fb02210959ba63bd41cf2c22114664e4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2&with_watch_monetization_types=flatrate'
-				)
-				.then((response) => response.data.results)
-		} catch (error) {
-			console.log(error)
-		}
-	},
-
-	getDetails: async (id) => {
-		return await instance
-			.get(`3/movie/${id}?api_key=${APIKey_v3auth}&language=en-US`)
-			.then((response) => response.data)
-	},
-
-	getCredits: async (id) => {
-		return await instance
-			.get(
-				`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${APIKey_v3auth}&language=en-US`
-			)
-			.then((response) => response.data)
-	},
-}
+export default new API()
