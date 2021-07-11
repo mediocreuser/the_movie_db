@@ -1,0 +1,2 @@
+(this.webpackJsonpthe_movie_db=this.webpackJsonpthe_movie_db||[]).push([[13],{395:function(e,t,s){"use strict";s.r(t);s(0);var i=s(17),o=s(418),a=s(232),c=s(1);t.default=function(){return Object(c.jsx)(o.a,{status:"404",title:"404",subTitle:"Sorry, the page you visited does not exist.",extra:Object(c.jsx)(a.a,{type:"primary",children:Object(c.jsx)(i.b,{to:"/",className:"text-decoration-none",children:"Back Home"})})})}}}]);
+//# sourceMappingURL=13.87b5da57.chunk.js.map
